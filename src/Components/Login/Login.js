@@ -1,9 +1,21 @@
-import React from 'react';
-
+import React, { useState,useContext } from 'react';
+import {FirebaseContext} from '../../store/FirebaseContext'
 import Logo from '../../olx-logo.png';
 import './Login.css';
+import {useHistory} from 'react-router-dom'
 
 function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const {firebase} = useContext(FirebaseContext)
+  const handleLogin = (e)=>{
+    e.preventDefault();
+    firebase.auth().signInWithEmailAndPassword(email, password).then(()=>{
+      alert('Logeed In');
+    }).catch((error)=> {
+      alert(error.message);
+    })
+  }
   return (
     <div>
       <div className="loginParentDiv">
@@ -14,6 +26,8 @@ function Login() {
           <input
             className="input"
             type="email"
+            value={email}
+            onchange={(e)=>setEmail(e.target.value)}
             id="fname"
             name="email"
             defaultValue="John"
@@ -24,6 +38,8 @@ function Login() {
           <input
             className="input"
             type="password"
+            value={password}
+            onchange={(e)=>setPassword(e.target.value)}
             id="lname"
             name="password"
             defaultValue="Doe"
